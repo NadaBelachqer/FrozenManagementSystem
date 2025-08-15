@@ -110,15 +110,6 @@ cd FrozenInventorySystem
 Update-Package -reinstall
 ```
 
-### 4. Migration de la Base de Données
-1. Ouvrez la Console Package Manager dans Visual Studio
-2. Exécutez les commandes suivantes :
-```powershell
-Enable-Migrations
-Add-Migration InitialCreate
-Update-Database
-```
-
 ### 5. Compilation et Exécution
 1. Appuyez sur `F5` ou cliquez sur "Start Debugging"
 2. L'application s'ouvrira dans votre navigateur par défaut
