@@ -1,0 +1,256 @@
+﻿@{
+    ViewBag.Title = "Gestion des Zones";
+}
+
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h3 class="card-title">Liste des Zones de Stockage</h3>
+            <div>
+                <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#zoneModal">
+                    <i class="bi bi-plus-circle"></i> Ajouter Zone
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#fregonModal">
+                    <i class="bi bi-collection"></i> Gérer Frégons
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="zonesTable" class="table table-bordered table-striped table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Nom</th>
+                        <th>Frégon</th>
+                        <th>Chambre</th>
+                        <th>Capacité</th>
+                        <th>Disponibilité</th>
+                        <th>Produits</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Zone 1-1</td>
+                        <td>Frégon Nord</td>
+                        <td>Chambre #1</td>
+                        <td>150 m³</td>
+                        <td>
+                            <div class="progress progress-xs">
+                                <div class="progress-bar bg-success" style="width: 75%"></div>
+                            </div>
+                            <small>75% disponible</small>
+                        </td>
+                        <td>24</td>
+                        <td>
+                            <button class="btn btn-sm btn-info" title="Détails">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" title="Modifier">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" title="Supprimer">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Zone 1-2</td>
+                        <td>Frégon Nord</td>
+                        <td>Chambre #1</td>
+                        <td>150 m³</td>
+                        <td>
+                            <div class="progress progress-xs">
+                                <div class="progress-bar bg-warning" style="width: 45%"></div>
+                            </div>
+                            <small>45% disponible</small>
+                        </td>
+                        <td>32</td>
+                        <td>
+                            <button class="btn btn-sm btn-info" title="Détails">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" title="Modifier">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" title="Supprimer">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Zone 2-1</td>
+                        <td>Frégon Sud</td>
+                        <td>Chambre #2</td>
+                        <td>120 m³</td>
+                        <td>
+                            <div class="progress progress-xs">
+                                <div class="progress-bar bg-danger" style="width: 15%"></div>
+                            </div>
+                            <small>15% disponible</small>
+                        </td>
+                        <td>42</td>
+                        <td>
+                            <button class="btn btn-sm btn-info" title="Détails">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" title="Modifier">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" title="Supprimer">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal pour ajouter/modifier une zone -->
+<div class="modal fade" id="zoneModal" tabindex="-1" aria-labelledby="zoneModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="zoneModalLabel">Nouvelle Zone</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="zoneForm">
+                    <div class="mb-3">
+                        <label for="zoneNom" class="form-label">Nom de la Zone</label>
+                        <input type="text" class="form-control" id="zoneNom" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="zoneFregon" class="form-label">Frégon</label>
+                        <select class="form-select" id="zoneFregon" required>
+                            <option value="">Sélectionner un frégon</option>
+                            <option value="1">Frégon Nord</option>
+                            <option value="2">Frégon Sud</option>
+                            <option value="3">Frégon Est</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="zoneChambre" class="form-label">Chambre Froide</label>
+                        <select class="form-select" id="zoneChambre" required>
+                            <option value="">Sélectionner une chambre</option>
+                            <option value="1">Chambre #1 - Viandes (-18°C)</option>
+                            <option value="2">Chambre #2 - Poissons (-22°C)</option>
+                            <option value="3">Chambre #3 - Produits Laitiers (4°C)</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="zoneCapacite" class="form-label">Capacité (m³)</label>
+                        <input type="number" class="form-control" id="zoneCapacite" min="1" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-primary" id="saveZone">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal pour gérer les frégons -->
+<div class="modal fade" id="fregonModal" tabindex="-1" aria-labelledby="fregonModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="fregonModalLabel">Gestion des Frégons</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-between mb-3">
+                    <input type="text" class="form-control me-2" id="fregonSearch" placeholder="Rechercher un frégon...">
+                    <button class="btn btn-success" id="addFregonBtn">
+                        <i class="bi bi-plus"></i> Ajouter
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th>Nom du Frégon</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Frégon Nord</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Frégon Sud</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Frégon Est</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            // Initialisation de DataTable pour les zones
+            $('#zonesTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/fr-FR.json'
+                },
+                responsive: true
+            });
+
+            // Gestion de l'enregistrement d'une zone
+            $('#saveZone').click(function () {
+                // Ici, ajouter le code pour sauvegarder la zone via AJAX
+                alert('Zone enregistrée avec succès!');
+                $('#zoneModal').modal('hide');
+                // Recharger les données du tableau
+            });
+
+            // Gestion des frégons
+            $('#addFregonBtn').click(function () {
+                const fregonName = prompt('Entrez le nom du nouveau frégon:');
+                if (fregonName) {
+                    // Ici, faire un appel AJAX pour ajouter le frégon
+                    alert(`Frégon "${fregonName}" ajouté avec succès!`);
+                    // Recharger la liste des frégons
+                }
+            });
+        });
+    </script>
+}

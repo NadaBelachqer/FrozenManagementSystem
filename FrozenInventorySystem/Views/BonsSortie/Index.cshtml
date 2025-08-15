@@ -1,0 +1,578 @@
+﻿@{
+    ViewBag.Title = "Gestion des Bons de Sortie";
+}
+
+<div class="card">
+    <div class="card-header bg-light">
+        <div class="d-flex justify-content-between align-items-center">
+            <h3 class="card-title">
+                <i class="bi bi-box-arrow-right"></i> Bons de Sortie
+            </h3>
+            <div>
+                <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addExitModal">
+                    <i class="bi bi-plus-circle"></i> Nouveau Bon
+                </button>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="bi bi-download"></i> Exporter
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#" id="exportExcel">
+                            <i class="bi bi-file-earmark-excel"></i> Excel
+                        </a>
+                        <a class="dropdown-item" href="#" id="exportPDF">
+                            <i class="bi bi-file-earmark-pdf"></i> PDF
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <!-- Filtres avancés -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <input type="text" id="searchInput" class="form-control" placeholder="Rechercher...">
+            </div>
+            <div class="col-md-2">
+                <select id="clientFilter" class="form-select">
+                    <option value="">Tous les clients</option>
+                    <option value="1">Client 1</option>
+                    <option value="2">Client 2</option>
+                    <option value="3">Client 3</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select id="productFilter" class="form-select">
+                    <option value="">Tous les produits</option>
+                    <option value="1">Produit A</option>
+                    <option value="2">Produit B</option>
+                    <option value="3">Produit C</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <input type="date" id="dateFilter" class="form-control">
+            </div>
+            <div class="col-md-2">
+                <button id="resetFilters" class="btn btn-outline-secondary w-100">
+                    <i class="bi bi-arrow-counterclockwise"></i> Réinitialiser
+                </button>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table id="exitTable" class="table table-bordered table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>N° Bon</th>
+                        <th>Date</th>
+                        <th>Client</th>
+                        <th>Produit</th>
+                        <th>Quantité</th>
+                        <th>Coût</th>
+                        <th>Prix</th>
+                        <th>Bon Entrée</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>BS23-00001</td>
+                        <td>10/07/2023</td>
+                        <td>Client 1</td>
+                        <td>Produit A</td>
+                        <td>50</td>
+                        <td>2 500,00 DH</td>
+                        <td>3 250,00 DH</td>
+                        <td>BE23-00001</td>
+                        <td>
+                            <button class="btn btn-sm btn-info" title="Détails" onclick="showExitDetails(1)">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" title="Modifier" onclick="editExit(1)">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-primary" title="Facturer" onclick="createInvoice(1)">
+                                <i class="bi bi-receipt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>BS23-00002</td>
+                        <td>15/07/2023</td>
+                        <td>Client 2</td>
+                        <td>Produit B</td>
+                        <td>75</td>
+                        <td>3 750,00 DH</td>
+                        <td>4 875,00 DH</td>
+                        <td>BE23-00002</td>
+                        <td>
+                            <button class="btn btn-sm btn-info" title="Détails" onclick="showExitDetails(2)">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" title="Modifier" onclick="editExit(2)">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-primary" title="Facturer" onclick="createInvoice(2)">
+                                <i class="bi bi-receipt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>BS23-00003</td>
+                        <td>20/07/2023</td>
+                        <td>Client 3</td>
+                        <td>Produit C</td>
+                        <td>30</td>
+                        <td>1 500,00 DH</td>
+                        <td>1 950,00 DH</td>
+                        <td>BE23-00003</td>
+                        <td>
+                            <button class="btn btn-sm btn-info" title="Détails" onclick="showExitDetails(3)">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" title="Modifier" onclick="editExit(3)">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-primary" title="Facturer" onclick="createInvoice(3)">
+                                <i class="bi bi-receipt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Ajout/Modification Bon de Sortie -->
+<div class="modal fade" id="addExitModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Nouveau Bon de Sortie</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="exitForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Numéro Bon</label>
+                                <input type="text" class="form-control" value="BS23-00004" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Date</label>
+                                <input type="date" class="form-control" name="DateBonSortie" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Client</label>
+                                <select class="form-select" name="ClientID" required>
+                                    <option value="">Sélectionner un client</option>
+                                    <option value="1">Client 1</option>
+                                    <option value="2">Client 2</option>
+                                    <option value="3">Client 3</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Bon d'Entrée</label>
+                                <select class="form-select" name="BonEntreeID" id="bonEntreeSelect" required>
+                                    <option value="">Sélectionner un client d'abord</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Quantité disponible</label>
+                                <input type="text" class="form-control" id="qteDisponible" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Quantité à sortir</label>
+                                <input type="number" class="form-control" name="QteSortie" min="1" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Coût</label>
+                                <input type="number" step="0.01" class="form-control" name="Cout" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Prix</label>
+                                <input type="number" step="0.01" class="form-control" name="Prix" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Détails Bon de Sortie -->
+<div class="modal fade" id="exitDetailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title">Détails du Bon de Sortie</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="exitDetailsContent">
+                <!-- Contenu statique pour l'exemple -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Informations de base</h6>
+                        <p><strong>N° Bon:</strong> <span id="detailExitNumero">BS23-00001</span></p>
+                        <p><strong>Date:</strong> <span id="detailExitDate">10/07/2023</span></p>
+                        <p><strong>Client:</strong> <span id="detailExitClient">Client 1</span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Détails produit</h6>
+                        <p><strong>Produit:</strong> <span id="detailExitProduit">Produit A</span></p>
+                        <p><strong>Bon d'Entrée:</strong> <span id="detailExitBonEntree">BE23-00001</span></p>
+                        <p><strong>Quantité:</strong> <span id="detailExitQte">50</span></p>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <p><strong>Coût:</strong> <span id="detailExitCout">2 500,00 DH</span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Prix:</strong> <span id="detailExitPrix">3 250,00 DH</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Facturation -->
+<div class="modal fade" id="invoiceModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Création de Facture</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> Vous allez créer une facture pour le bon de sortie <strong id="bonSortieFacture">BS23-00001</strong>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Date Facture</label>
+                            <input type="date" class="form-control" id="dateFacture" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Client</label>
+                            <input type="text" class="form-control" id="clientFacture" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Produit</label>
+                            <input type="text" class="form-control" id="produitFacture" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Quantité</label>
+                            <input type="text" class="form-control" id="qteFacture" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label class="form-label">Prix Unitaire</label>
+                            <input type="text" class="form-control" id="prixUnitaireFacture" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label class="form-label">TVA (%)</label>
+                            <input type="number" step="0.01" class="form-control" id="tvaFacture" value="20">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label class="form-label">Total TTC</label>
+                            <input type="text" class="form-control" id="totalTTFacture" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-success" onclick="generateInvoice()">Générer Facture</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Initialisation de DataTable
+            var table = $('#exitTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/fr-FR.json'
+                },
+                responsive: true,
+                dom: '<"top"lf>rt<"bottom"ip>',
+                buttons: [
+                    {
+                        extend: 'excel',
+                        text: '<i class="bi bi-file-earmark-excel"></i> Excel',
+                        className: 'btn btn-success'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<i class="bi bi-file-earmark-pdf"></i> PDF',
+                        className: 'btn btn-danger'
+                    }
+                ]
+            });
+
+            // Filtrage avancé
+            $('#searchInput').on('keyup', function () {
+                table.search(this.value).draw();
+            });
+
+            $('#clientFilter').on('change', function () {
+                table.column(2).search(this.value).draw();
+            });
+
+            $('#productFilter').on('change', function () {
+                table.column(3).search(this.value).draw();
+            });
+
+            $('#dateFilter').on('change', function () {
+                table.column(1).search(this.value).draw();
+            });
+
+            $('#resetFilters').click(function () {
+                $('#searchInput').val('');
+                $('#clientFilter').val('');
+                $('#productFilter').val('');
+                $('#dateFilter').val('');
+                table.search('').columns().search('').draw();
+            });
+
+            // Export Excel
+            $('#exportExcel').click(function () {
+                table.button('.buttons-excel').trigger();
+            });
+
+            // Export PDF
+            $('#exportPDF').click(function () {
+                table.button('.buttons-pdf').trigger();
+            });
+
+            // Gestion du formulaire
+            $('#exitForm').on('submit', function(e) {
+                e.preventDefault();
+                alert('Bon de sortie enregistré avec succès (simulation)');
+                $('#addExitModal').modal('hide');
+                this.reset();
+            });
+
+            // Simulation du chargement des bons d'entrée par client
+            $('select[name="ClientID"]').on('change', function() {
+                var clientId = $(this).val();
+                if (clientId) {
+                    $('#bonEntreeSelect').empty().append('<option value="">Chargement...</option>');
+
+                    // Simulation de chargement asynchrone
+                    setTimeout(function() {
+                        var entries = [];
+                        if (clientId == '1') {
+                            entries = [
+                                { id: 1, numero: 'BE23-00001', produit: 'Produit A', qte: 50 },
+                                { id: 2, numero: 'BE23-00004', produit: 'Produit B', qte: 30 }
+                            ];
+                        } else if (clientId == '2') {
+                            entries = [
+                                { id: 3, numero: 'BE23-00002', produit: 'Produit B', qte: 75 },
+                                { id: 4, numero: 'BE23-00005', produit: 'Produit C', qte: 40 }
+                            ];
+                        } else {
+                            entries = [
+                                { id: 5, numero: 'BE23-00003', produit: 'Produit C', qte: 45 },
+                                { id: 6, numero: 'BE23-00006', produit: 'Produit A', qte: 20 }
+                            ];
+                        }
+
+                        $('#bonEntreeSelect').empty().append('<option value="">Sélectionner un bon d\'entrée</option>');
+                        entries.forEach(function(entry) {
+                            $('#bonEntreeSelect').append('<option value="' + entry.id + '" data-produit="' + entry.produit + '" data-qte="' + entry.qte + '">' + entry.numero + ' (' + entry.produit + ' - ' + entry.qte + ' restants)</option>');
+                        });
+                    }, 500);
+                } else {
+                    $('#bonEntreeSelect').empty().append('<option value="">Sélectionner un client d\'abord</option>');
+                    $('#qteDisponible').val('');
+                }
+            });
+
+            // Mise à jour des informations quand un bon d'entrée est sélectionné
+            $('#bonEntreeSelect').on('change', function() {
+                var selectedOption = $(this).find('option:selected');
+                var qteDisponible = selectedOption.data('qte');
+                var produit = selectedOption.data('produit');
+
+                $('#qteDisponible').val(qteDisponible || '');
+                $('input[name="QteSortie"]').attr('max', qteDisponible);
+
+                // Simulation de calcul du coût et prix
+                if (produit) {
+                    var coutUnitaire = 0;
+                    if (produit == 'Produit A') coutUnitaire = 50;
+                    else if (produit == 'Produit B') coutUnitaire = 50;
+                    else if (produit == 'Produit C') coutUnitaire = 50;
+
+                    $('input[name="Cout"]').val(coutUnitaire.toFixed(2));
+                    $('input[name="Prix"]').val((coutUnitaire * 1.3).toFixed(2));
+                }
+            });
+
+            // Calcul du prix total quand la quantité change
+            $('input[name="QteSortie"]').on('change', function() {
+                var qte = parseFloat($(this).val()) || 0;
+                var coutUnitaire = parseFloat($('input[name="Cout"]').val()) || 0;
+                var prixUnitaire = parseFloat($('input[name="Prix"]').val()) || 0;
+
+                $('input[name="Cout"]').val((coutUnitaire * qte).toFixed(2));
+                $('input[name="Prix"]').val((prixUnitaire * qte).toFixed(2));
+            });
+        });
+
+        function showExitDetails(exitId) {
+            // Simulation de données pour les détails
+            var exits = {
+                1: {
+                    numero: "BS23-00001",
+                    date: "10/07/2023",
+                    client: "Client 1",
+                    produit: "Produit A",
+                    bonEntree: "BE23-00001",
+                    qte: 50,
+                    cout: "2 500,00 DH",
+                    prix: "3 250,00 DH"
+                },
+                2: {
+                    numero: "BS23-00002",
+                    date: "15/07/2023",
+                    client: "Client 2",
+                    produit: "Produit B",
+                    bonEntree: "BE23-00002",
+                    qte: 75,
+                    cout: "3 750,00 DH",
+                    prix: "4 875,00 DH"
+                },
+                3: {
+                    numero: "BS23-00003",
+                    date: "20/07/2023",
+                    client: "Client 3",
+                    produit: "Produit C",
+                    bonEntree: "BE23-00003",
+                    qte: 30,
+                    cout: "1 500,00 DH",
+                    prix: "1 950,00 DH"
+                }
+            };
+
+            var exit = exits[exitId];
+            if (exit) {
+                $('#detailExitNumero').text(exit.numero);
+                $('#detailExitDate').text(exit.date);
+                $('#detailExitClient').text(exit.client);
+                $('#detailExitProduit').text(exit.produit);
+                $('#detailExitBonEntree').text(exit.bonEntree);
+                $('#detailExitQte').text(exit.qte);
+                $('#detailExitCout').text(exit.cout);
+                $('#detailExitPrix').text(exit.prix);
+
+                $('#exitDetailsModal').modal('show');
+            }
+        }
+
+        function editExit(exitId) {
+            alert('Fonctionnalité de modification pour le bon de sortie ID: ' + exitId + ' (simulation)');
+        }
+
+        function createInvoice(exitId) {
+            // Simulation de données pour la facturation
+            var exits = {
+                1: {
+                    numero: "BS23-00001",
+                    client: "Client 1",
+                    produit: "Produit A",
+                    qte: 50,
+                    prixUnitaire: 65.00
+                },
+                2: {
+                    numero: "BS23-00002",
+                    client: "Client 2",
+                    produit: "Produit B",
+                    qte: 75,
+                    prixUnitaire: 65.00
+                },
+                3: {
+                    numero: "BS23-00003",
+                    client: "Client 3",
+                    produit: "Produit C",
+                    qte: 30,
+                    prixUnitaire: 65.00
+                }
+            };
+
+            var exit = exits[exitId];
+            if (exit) {
+                $('#bonSortieFacture').text(exit.numero);
+                $('#clientFacture').val(exit.client);
+                $('#produitFacture').val(exit.produit);
+                $('#qteFacture').val(exit.qte);
+                $('#prixUnitaireFacture').val(exit.prixUnitaire.toFixed(2));
+                calculateTotal();
+
+                $('#invoiceModal').modal('show');
+            }
+        }
+
+        function calculateTotal() {
+            var qte = parseFloat($('#qteFacture').val()) || 0;
+            var prixUnitaire = parseFloat($('#prixUnitaireFacture').val()) || 0;
+            var tva = parseFloat($('#tvaFacture').val()) || 0;
+
+            var totalHT = qte * prixUnitaire;
+            var montantTVA = totalHT * (tva / 100);
+            var totalTTC = totalHT + montantTVA;
+
+            $('#totalTTFacture').val(totalTTC.toFixed(2));
+        }
+
+        function generateInvoice() {
+            alert('Facture générée avec succès (simulation)');
+            $('#invoiceModal').modal('hide');
+        }
+
+        // Calcul du total quand la TVA change
+        $('#tvaFacture').on('change', calculateTotal);
+    </script>
+}

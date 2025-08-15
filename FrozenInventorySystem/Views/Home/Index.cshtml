@@ -1,0 +1,332 @@
+﻿@{
+    ViewBag.Title = "Tableau de bord";
+}
+
+<!--begin::Row-->
+<div class="row">
+    <!-- Chambres Froides -->
+    <div class="col-lg-3 col-6">
+        <div class="small-box text-bg-primary">
+            <div class="inner">
+                <h3>8</h3>
+                <p>Chambres Froides</p>
+            </div>
+            <i class="bi bi-thermometer-snow small-box-icon-custom"></i>
+            <a href="#" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
+                Voir plus <i class="bi bi-link-45deg"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Produits Stockés -->
+    <div class="col-lg-3 col-6">
+        <div class="small-box text-bg-info">
+            <div class="inner">
+                <h3>320</h3>
+                <p>Produits Stockés</p>
+            </div>
+            <i class="bi bi-box-seam small-box-icon-custom"></i>
+            <a href="#" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
+                Voir plus <i class="bi bi-link-45deg"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Bons d'Entrée -->
+    <div class="col-lg-3 col-6">
+        <div class="small-box text-bg-warning">
+            <div class="inner">
+                <h3>42</h3>
+                <p>Bons d'Entrée</p>
+            </div>
+            <i class="bi bi-box-arrow-in-down small-box-icon-custom"></i>
+            <a href="#" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
+                Voir plus <i class="bi bi-link-45deg"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Bons de Sortie -->
+    <div class="col-lg-3 col-6">
+        <div class="small-box text-bg-danger">
+            <div class="inner">
+                <h3>36</h3>
+                <p>Bons de Sortie</p>
+            </div>
+            <i class="bi bi-box-arrow-up small-box-icon-custom"></i>
+            <a href="#" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
+                Voir plus <i class="bi bi-link-45deg"></i>
+            </a>
+        </div>
+    </div>
+</div>
+<!--end::Row-->
+<!--begin::Row-->
+<div class="row">
+    <!-- Factures -->
+    <div class="col-lg-3 col-6">
+        <div class="small-box text-bg-secondary">
+            <div class="inner">
+                <h3>28</h3>
+                <p>Factures</p>
+            </div>
+            <i class="bi bi-receipt small-box-icon-custom"></i>
+            <a href="#" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
+                Voir plus <i class="bi bi-link-45deg"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Paiements -->
+    <div class="col-lg-3 col-6">
+        <div class="small-box text-bg-success">
+            <div class="inner">
+                <h3>24</h3>
+                <p>Paiements</p>
+            </div>
+            <i class="bi bi-credit-card small-box-icon-custom"></i>
+            <a href="#" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
+                Voir plus <i class="bi bi-link-45deg"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Alertes Stock -->
+    <div class="col-lg-3 col-6">
+        <div class="small-box text-bg-dark">
+            <div class="inner">
+                <h3>12</h3>
+                <p>Alertes Stock</p>
+            </div>
+            <i class="bi bi-exclamation-triangle small-box-icon-custom"></i>
+            <a href="#" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
+                Voir plus <i class="bi bi-link-45deg"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Taux de remplissage -->
+    <div class="col-lg-3 col-6">
+        <div class="small-box" style="background-color: #6f42c1; color: white;">
+            <div class="inner">
+                <h3>85%</h3>
+                <p>Taux de remplissage</p>
+            </div>
+            <i class="bi bi-percent small-box-icon-custom"></i>
+            <a href="#" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
+                Voir plus <i class="bi bi-link-45deg"></i>
+            </a>
+        </div>
+    </div>
+</div>
+<!--end::Row-->
+<!--begin::Row-->
+<div class="row">
+    <!-- Mouvements de Stock -->
+    <div class="col-lg-7">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title">Mouvements de Stock (7 derniers jours)</h3>
+            </div>
+            <div class="card-body">
+                <div id="revenue-chart" style="min-height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alertes Stock -->
+    <div class="col-lg-5">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title">Alertes Stock Critique</h3>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped mb-0">
+                        <thead>
+                            <tr>
+                                <th>Produit</th>
+                                <th>Chambre</th>
+                                <th>Stock</th>
+                                <th>Seuil</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Saumon fumé</td>
+                                <td>CF #3</td>
+                                <td><span class="badge text-bg-danger">2</span></td>
+                                <td>10</td>
+                            </tr>
+                            <tr>
+                                <td>Fromage Brie</td>
+                                <td>CF #2</td>
+                                <td><span class="badge text-bg-warning">5</span></td>
+                                <td>15</td>
+                            </tr>
+                            <tr>
+                                <td>Crème fraîche</td>
+                                <td>CF #1</td>
+                                <td><span class="badge text-bg-warning">8</span></td>
+                                <td>20</td>
+                            </tr>
+                            <tr>
+                                <td>Beurre doux</td>
+                                <td>CF #1</td>
+                                <td><span class="badge text-bg-warning">12</span></td>
+                                <td>25</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="#" class="btn btn-sm btn-warning">Gérer les alertes</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Row-->
+<!--begin::Row-->
+<div class="row">
+    <!-- Taux de remplissage -->
+    <div class="col-lg-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title">Taux de remplissage des chambres</h3>
+            </div>
+            <div class="card-body">
+                <div id="fill-rate-chart" style="min-height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Partition des produits -->
+    <div class="col-lg-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title">Partition des produits par catégorie</h3>
+            </div>
+            <div class="card-body">
+                <div id="product-categories-chart" style="min-height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Row-->
+
+@section scripts {
+    <!-- ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js"></script>
+
+    <script>
+        // Chart for stock movements
+        var stockOptions = {
+            series: [
+                {
+                    name: 'Entrées',
+                    data: [15, 42, 38, 24, 33, 28, 40]
+                },
+                {
+                    name: 'Sorties',
+                    data: [28, 35, 32, 45, 38, 31, 27]
+                }
+            ],
+            chart: {
+                height: 300,
+                type: 'area',
+                toolbar: {
+                    show: false
+                }
+            },
+            colors: ['#20c997', '#fd7e14'],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth'
+            },
+            xaxis: {
+                categories: ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
+            },
+            tooltip: {
+                y: {
+                    formatter: function (val) {
+                        return val + " unités"
+                    }
+                }
+            }
+        };
+
+        var stockChart = new ApexCharts(document.querySelector("#revenue-chart"), stockOptions);
+        stockChart.render();
+
+        // Chart for fill rate
+        var fillRateOptions = {
+            series: [{
+                name: 'Remplissage',
+                data: [85, 72, 65, 90, 78, 82, 60, 45]
+            }],
+            chart: {
+                type: 'bar',
+                height: 300
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '55%',
+                    endingShape: 'rounded'
+                },
+            },
+            dataLabels: {
+                enabled: false
+            },
+            colors: ['#6f42c1'],
+            xaxis: {
+                categories: ['CF #1', 'CF #2', 'CF #3', 'CF #4', 'CF #5', 'CF #6', 'CF #7', 'CF #8'],
+            },
+            yaxis: {
+                title: {
+                    text: 'Pourcentage'
+                },
+                min: 0,
+                max: 100
+            },
+            tooltip: {
+                y: {
+                    formatter: function (val) {
+                        return val + "%"
+                    }
+                }
+            }
+        };
+
+        var fillRateChart = new ApexCharts(document.querySelector("#fill-rate-chart"), fillRateOptions);
+        fillRateChart.render();
+
+        // Chart for product categories
+        var productCategoriesOptions = {
+            series: [32, 25, 22.5, 17.2, 8.7],
+            labels: ['Viandes', 'Poissons', 'Produits laitiers', 'Légumes', 'Préparations'],
+            chart: {
+                type: 'donut',
+                height: 300
+            },
+            colors: ['#0d6efd', '#20c997', '#fd7e14', '#d63384', '#6f42c1'],
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }]
+        };
+
+        var productCategoriesChart = new ApexCharts(document.querySelector("#product-categories-chart"), productCategoriesOptions);
+        productCategoriesChart.render();
+    </script>
+}

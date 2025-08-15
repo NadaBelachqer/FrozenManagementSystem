@@ -1,0 +1,661 @@
+﻿@{
+    ViewBag.Title = "Tableau de Bord des Factures";
+}
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card bg-gradient-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h2 class="card-title mb-0"><i class="bi bi-receipt"></i> Gestion des Factures</h2>
+                        <p class="card-text">Visualisation et gestion complète du cycle de facturation</p>
+                    </div>
+                    <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#createInvoiceModal">
+                        <i class="bi bi-plus-circle"></i> Nouvelle Facture
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cartes de Statistiques -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Chiffre d'Affaires (Mois)
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">248,750 DH</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-currency-exchange fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            Factures En Attente
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">8</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-hourglass-split fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Retards de Paiement
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">3</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-exclamation-triangle fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Clients Actifs
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">24</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-people fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Graphiques -->
+    <div class="col-lg-8">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Évolution du Chiffre d'Affaires</h6>
+                <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown">
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow">
+                        <a class="dropdown-item" href="#">Exporter</a>
+                        <a class="dropdown-item" href="#">Paramètres</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="chart-area">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Répartition par Client -->
+    <div class="col-lg-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Répartition par Client</h6>
+            </div>
+            <div class="card-body">
+                <div class="chart-pie pt-4 pb-2">
+                    <canvas id="clientPieChart"></canvas>
+                </div>
+                <div class="mt-4 text-center small">
+                    <span class="mr-2">
+                        <i class="bi bi-square-fill text-primary"></i> Client A
+                    </span>
+                    <span class="mr-2">
+                        <i class="bi bi-square-fill text-success"></i> Client B
+                    </span>
+                    <span class="mr-2">
+                        <i class="bi bi-square-fill text-info"></i> Client C
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Liste des Factures Récentes -->
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Factures Récentes</h6>
+                <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown">
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow">
+                        <a class="dropdown-item" href="#">Voir tout</a>
+                        <a class="dropdown-item" href="#">Exporter</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="recentInvoicesTable">
+                        <thead>
+                            <tr>
+                                <th>N° Facture</th>
+                                <th>Client</th>
+                                <th>Date</th>
+                                <th>Montant</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>FAC-2023-0015</td>
+                                <td>Client Premium</td>
+                                <td>15/07/2023</td>
+                                <td>32,500.00 DH</td>
+                                <td><span class="badge bg-success">Payée</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" title="Voir" onclick="viewInvoice(15)">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary" title="Télécharger">
+                                        <i class="bi bi-download"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>FAC-2023-0014</td>
+                                <td>Client Standard</td>
+                                <td>12/07/2023</td>
+                                <td>18,750.00 DH</td>
+                                <td><span class="badge bg-warning">En attente</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" title="Voir" onclick="viewInvoice(14)">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary" title="Télécharger">
+                                        <i class="bi bi-download"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>FAC-2023-0013</td>
+                                <td>Client VIP</td>
+                                <td>10/07/2023</td>
+                                <td>45,200.00 DH</td>
+                                <td><span class="badge bg-danger">En retard</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" title="Voir" onclick="viewInvoice(13)">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary" title="Télécharger">
+                                        <i class="bi bi-download"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-success" title="Rappeler">
+                                        <i class="bi bi-envelope"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Création Facture -->
+<div class="modal fade" id="createInvoiceModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Nouvelle Facture</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <select class="form-select" id="clientSelect">
+                                <option value="">Sélectionner un client</option>
+                                <option value="1">Client Premium</option>
+                                <option value="2">Client Standard</option>
+                                <option value="3">Client VIP</option>
+                            </select>
+                            <label for="clientSelect">Client</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input type="date" class="form-control" id="invoiceDate" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                            <label for="invoiceDate">Date Facture</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header bg-light">
+                        <h6 class="mb-0">Bons de Sortie à Facturer</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="billsToInvoiceTable">
+                                <thead>
+                                    <tr>
+                                        <th width="5%"></th>
+                                        <th>N° Bon</th>
+                                        <th>Date</th>
+                                        <th>Produit</th>
+                                        <th>Quantité</th>
+                                        <th>Prix Unitaire</th>
+                                        <th>Total HT</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><input type="checkbox" class="form-check-input"></td>
+                                        <td>BS23-00015</td>
+                                        <td>14/07/2023</td>
+                                        <td>Produit Premium</td>
+                                        <td>50</td>
+                                        <td>650.00 DH</td>
+                                        <td>32,500.00 DH</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" class="form-check-input" checked></td>
+                                        <td>BS23-00014</td>
+                                        <td>12/07/2023</td>
+                                        <td>Produit Standard</td>
+                                        <td>75</td>
+                                        <td>250.00 DH</td>
+                                        <td>18,750.00 DH</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" class="form-check-input" checked></td>
+                                        <td>BS23-00013</td>
+                                        <td>10/07/2023</td>
+                                        <td>Produit VIP</td>
+                                        <td>40</td>
+                                        <td>1,130.00 DH</td>
+                                        <td>45,200.00 DH</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control" id="invoiceNotes" style="height: 100px"></textarea>
+                            <label for="invoiceNotes">Notes</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Total HT:</span>
+                                    <span id="subtotalAmount">96,450.00 DH</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>TVA (20%):</span>
+                                    <span id="taxAmount">19,290.00 DH</span>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between fw-bold">
+                                    <span>Total TTC:</span>
+                                    <span id="totalAmount">115,740.00 DH</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-primary">Enregistrer Brouillon</button>
+                <button type="button" class="btn btn-success">Valider Facture</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Visualisation Facture -->
+<div class="modal fade" id="viewInvoiceModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title">Facture FAC-2023-0015</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="invoice-container p-4">
+                    <div class="invoice-header mb-4">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <img src="https://via.placeholder.com/200x80?text=Company+Logo" alt="Logo" class="mb-3">
+                                <address class="mb-0">
+                                    <strong>Entreprise XYZ</strong><br>
+                                    123 Rue Principale<br>
+                                    Casablanca, Maroc<br>
+                                    Tél: +212 6 12 34 56 78<br>
+                                    Email: contact@xyz.ma
+                                </address>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <h2 class="mb-3">FACTURE</h2>
+                                <p class="mb-1"><strong>N°:</strong> FAC-2023-0015</p>
+                                <p class="mb-1"><strong>Date:</strong> 15/07/2023</p>
+                                <p class="mb-1"><strong>Client:</strong> CLT-2023-001</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="invoice-client mb-4">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Facturé à:</h5>
+                                <address>
+                                    <strong>Client Premium</strong><br>
+                                    456 Avenue des Clients<br>
+                                    Casablanca, Maroc<br>
+                                    ICE: 123456789<br>
+                                    Tél: +212 6 98 76 54 32
+                                </address>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <h5>Détails Paiement:</h5>
+                                <p class="mb-1"><strong>Statut:</strong> <span class="badge bg-success">Payée</span></p>
+                                <p class="mb-1"><strong>Date Paiement:</strong> 18/07/2023</p>
+                                <p class="mb-1"><strong>Mode:</strong> Virement Bancaire</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="invoice-items mb-4">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Description</th>
+                                        <th class="text-end">Quantité</th>
+                                        <th class="text-end">Prix Unitaire</th>
+                                        <th class="text-end">Total HT</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Produit Premium - BS23-00015</td>
+                                        <td class="text-end">50</td>
+                                        <td class="text-end">650.00 DH</td>
+                                        <td class="text-end">32,500.00 DH</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Produit Standard - BS23-00014</td>
+                                        <td class="text-end">75</td>
+                                        <td class="text-end">250.00 DH</td>
+                                        <td class="text-end">18,750.00 DH</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="invoice-totals">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="alert alert-info mb-0">
+                                    <h6>Notes:</h6>
+                                    <p class="mb-0">Paiement à effectuer dans les 30 jours suivant la date de facturation. Merci pour votre confiance.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Total HT</strong></td>
+                                                <td class="text-end">51,250.00 DH</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>TVA (20%)</strong></td>
+                                                <td class="text-end">10,250.00 DH</td>
+                                            </tr>
+                                            <tr class="table-active">
+                                                <td><strong>Total TTC</strong></td>
+                                                <td class="text-end">61,500.00 DH</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary">
+                    <i class="bi bi-printer"></i> Imprimer
+                </button>
+                <button type="button" class="btn btn-success">
+                    <i class="bi bi-download"></i> Télécharger PDF
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Initialisation des graphiques
+            initCharts();
+
+            // Initialisation de DataTable
+            $('#recentInvoicesTable').DataTable({
+                responsive: true,
+                ordering: false,
+                dom: '<"top"f>rt<"bottom"ip><"clear">',
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/fr-FR.json'
+                }
+            });
+
+            $('#billsToInvoiceTable').DataTable({
+                responsive: true,
+                ordering: false,
+                dom: '<"top"f>rt<"bottom"ip><"clear">',
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/fr-FR.json'
+                }
+            });
+
+            // Gestion des cases à cocher pour le total
+            $('input[type="checkbox"]').on('change', function () {
+                calculateInvoiceTotal();
+            });
+        });
+
+        function initCharts() {
+            // Graphique de revenus
+            var ctx = document.getElementById('revenueChart').getContext('2d');
+            var revenueChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'],
+                    datasets: [{
+                        label: 'Chiffre d\'Affaires',
+                        data: [185000, 192000, 210000, 198000, 235000, 245000, 248750, 0, 0, 0, 0, 0],
+                        backgroundColor: 'rgba(78, 115, 223, 0.05)',
+                        borderColor: 'rgba(78, 115, 223, 1)',
+                        pointBackgroundColor: 'rgba(78, 115, 223, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(78, 115, 223, 1)',
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function (value) {
+                                    return value.toLocaleString() + ' DH';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return context.dataset.label + ': ' + context.raw.toLocaleString() + ' DH';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Graphique camembert clients
+            var ctx2 = document.getElementById('clientPieChart').getContext('2d');
+            var clientPieChart = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Client Premium', 'Client Standard', 'Client VIP', 'Autres Clients'],
+                    datasets: [{
+                        data: [35, 25, 30, 10],
+                        backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e'],
+                        hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf', '#dda20a'],
+                        hoverBorderColor: "rgba(234, 236, 244, 1)",
+                    }],
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    var label = context.label || '';
+                                    var value = context.raw || 0;
+                                    var total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    var percentage = Math.round((value / total) * 100);
+                                    return label + ': ' + percentage + '% (' + value.toLocaleString() + ' DH)';
+                                }
+                            }
+                        }
+                    },
+                    cutout: '80%',
+                },
+            });
+        }
+
+        function calculateInvoiceTotal() {
+            var subtotal = 0;
+
+            $('#billsToInvoiceTable tbody tr').each(function () {
+                if ($(this).find('input[type="checkbox"]').is(':checked')) {
+                    var rowTotal = $(this).find('td:eq(6)').text();
+                    rowTotal = parseFloat(rowTotal.replace(/[^0-9.-]+/g, ""));
+                    subtotal += rowTotal;
+                }
+            });
+
+            var tax = subtotal * 0.2;
+            var total = subtotal + tax;
+
+            $('#subtotalAmount').text(subtotal.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' DH');
+            $('#taxAmount').text(tax.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' DH');
+            $('#totalAmount').text(total.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' DH');
+        }
+
+        function viewInvoice(invoiceId) {
+            // Simulation de données
+            var invoices = {
+                15: {
+                    number: "FAC-2023-0015",
+                    date: "15/07/2023",
+                    client: "Client Premium",
+                    status: "Payée",
+                    items: [
+                        { description: "Produit Premium - BS23-00015", qty: 50, price: 650.00, total: 32500.00 },
+                        { description: "Produit Standard - BS23-00014", qty: 75, price: 250.00, total: 18750.00 }
+                    ],
+                    subtotal: 51250.00,
+                    tax: 10250.00,
+                    total: 61500.00
+                },
+                14: {
+                    number: "FAC-2023-0014",
+                    date: "12/07/2023",
+                    client: "Client Standard",
+                    status: "En attente",
+                    items: [
+                        { description: "Produit Standard - BS23-00014", qty: 75, price: 250.00, total: 18750.00 }
+                    ],
+                    subtotal: 18750.00,
+                    tax: 3750.00,
+                    total: 22500.00
+                },
+                13: {
+                    number: "FAC-2023-0013",
+                    date: "10/07/2023",
+                    client: "Client VIP",
+                    status: "En retard",
+                    items: [
+                        { description: "Produit VIP - BS23-00013", qty: 40, price: 1130.00, total: 45200.00 }
+                    ],
+                    subtotal: 45200.00,
+                    tax: 9040.00,
+                    total: 54240.00
+                }
+            };
+
+            var invoice = invoices[invoiceId];
+            if (invoice) {
+                $('#viewInvoiceModal .modal-title').text('Facture ' + invoice.number);
+                $('#viewInvoiceModal').modal('show');
+            }
+        }
+    </script>
+}

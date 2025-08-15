@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewBag.Title - ColdStock Pro</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- AdminLTE CSS -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/dist/css/adminlte.min.css")">
+
+    <style>
+        body {
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .login-box {
+            width: 500px;
+        }
+
+        .login-card {
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            background-color: white;
+        }
+
+        .login-card-body {
+            padding: 2.5rem 3rem;
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-top: 20px;
+        }
+
+            .login-logo i {
+                font-size: 60px;
+                color: #2a8bf2;
+                margin-bottom: 10px;
+            }
+
+            .login-logo h1 {
+                color: #333;
+                font-weight: 700;
+                margin-top: 5px;
+                font-size: 28px;
+            }
+
+        .btn-login {
+            background-color: #2a8bf2;
+            border: none;
+            padding: 10px;
+            font-weight: 600;
+        }
+
+            .btn-login:hover {
+                background-color: #1a73e8;
+            }
+
+        .social-auth-links .btn {
+            border-radius: 4px;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .btn-facebook {
+            background-color: #3b5998;
+        }
+
+        .btn-google {
+            background-color: #db4437;
+        }
+
+        .login-box-msg {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 15px;
+            text-align: center;
+        }
+
+        .input-group-text {
+            background-color: #f8f9fa;
+            min-width: 40px;
+            justify-content: center;
+        }
+
+        .input-group .form-control {
+            border-left: 0;
+            padding-left: 0;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            color: #999;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-card">
+            <div class="login-logo">
+                <i class="fas fa-temperature-low"></i>
+                <h1>Cold<b>Stock</b> Pro</h1>
+            </div>
+
+            <div class="login-card-body">
+                <p class="login-box-msg">Sign in to start your session</p>
+
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="~/Scripts/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/Content/dist/js/adminlte.min.js"></script>
+</body>
+</html>

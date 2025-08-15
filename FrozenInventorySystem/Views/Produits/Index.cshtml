@@ -1,0 +1,394 @@
+﻿@{
+    ViewBag.Title = "Gestion des Produits";
+}
+
+<div class="card">
+    <div class="card-header bg-light">
+        <div class="d-flex justify-content-between align-items-center">
+            <h3 class="card-title">
+                <i class="bi bi-box-seam"></i> Inventaire des Produits
+            </h3>
+            <div>
+                <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                    <i class="bi bi-plus-circle"></i> Ajouter
+                </button>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="bi bi-download"></i> Exporter
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#" id="exportExcel">
+                            <i class="bi bi-file-earmark-excel"></i> Excel
+                        </a>
+                        <a class="dropdown-item" href="#" id="exportPDF">
+                            <i class="bi bi-file-earmark-pdf"></i> PDF
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <!-- Filtres avancés -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <input type="text" id="searchInput" class="form-control" placeholder="Rechercher...">
+            </div>
+            <div class="col-md-2">
+                <select id="categoryFilter" class="form-select">
+                    <option value="">Toutes catégories</option>
+                    <option value="Viande">Viande</option>
+                    <option value="Poisson">Poisson</option>
+                    <option value="Laitier">Laitier</option>
+                    <option value="Légume">Légume</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select id="stockFilter" class="form-select">
+                    <option value="">Tous les stocks</option>
+                    <option value="low">Stock faible</option>
+                    <option value="normal">Stock normal</option>
+                    <option value="high">Stock élevé</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button id="resetFilters" class="btn btn-outline-secondary w-100">
+                    <i class="bi bi-arrow-counterclockwise"></i> Réinitialiser
+                </button>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table id="productsTable" class="table table-bordered table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Code</th>
+                        <th>Nom</th>
+                        <th>Catégorie</th>
+                        <th>Prix Unitaire</th>
+                        <th>Stock</th>
+                        <th>Seuil Alerte</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>PROD001</td>
+                        <td>Filet de Boeuf</td>
+                        <td>Viande</td>
+                        <td>120.00 DH</td>
+                        <td>15</td>
+                        <td>20</td>
+                        <td>
+                            <span class="badge bg-danger">Alerte Stock</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-info" title="Détails" onclick="showProductDetails(1)">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" title="Modifier" onclick="editProduct(1)">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>PROD002</td>
+                        <td>Saumon Frais</td>
+                        <td>Poisson</td>
+                        <td>90.50 DH</td>
+                        <td>25</td>
+                        <td>15</td>
+                        <td>
+                            <span class="badge bg-success">Disponible</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-info" title="Détails" onclick="showProductDetails(2)">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" title="Modifier" onclick="editProduct(2)">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>PROD003</td>
+                        <td>Lait Entier</td>
+                        <td>Laitier</td>
+                        <td>8.75 DH</td>
+                        <td>50</td>
+                        <td>30</td>
+                        <td>
+                            <span class="badge bg-success">Disponible</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-info" title="Détails" onclick="showProductDetails(3)">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" title="Modifier" onclick="editProduct(3)">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>PROD004</td>
+                        <td>Tomates</td>
+                        <td>Légume</td>
+                        <td>4.20 DH</td>
+                        <td>10</td>
+                        <td>25</td>
+                        <td>
+                            <span class="badge bg-warning">Stock Faible</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-info" title="Détails" onclick="showProductDetails(4)">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" title="Modifier" onclick="editProduct(4)">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>PROD005</td>
+                        <td>Fromage Blanc</td>
+                        <td>Laitier</td>
+                        <td>12.30 DH</td>
+                        <td>8</td>
+                        <td>10</td>
+                        <td>
+                            <span class="badge bg-danger">Alerte Stock</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-info" title="Détails" onclick="showProductDetails(5)">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" title="Modifier" onclick="editProduct(5)">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Graphiques statistiques -->
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="card-title">
+                    <i class="bi bi-pie-chart"></i> Répartition par Catégorie
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="categoryChart" style="min-height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title">
+                    <i class="bi bi-bar-chart"></i> Niveau de Stock
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="stockLevelChart" style="min-height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Ajout/Modification Produit -->
+<div class="modal fade" id="addProductModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Nouveau Produit</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="productForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Code Produit</label>
+                                <input type="text" class="form-control" name="Code" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Nom</label>
+                                <input type="text" class="form-control" name="Nom" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Catégorie</label>
+                                <select class="form-select" name="Categorie" required>
+                                    <option value="Viande">Viande</option>
+                                    <option value="Poisson">Poisson</option>
+                                    <option value="Laitier">Produit Laitier</option>
+                                    <option value="Légume">Légume</option>
+                                    <option value="Autre">Autre</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Prix Unitaire (DH)</label>
+                                <input type="number" step="0.01" class="form-control" name="PrixUnitaire" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Quantité Initiale</label>
+                                <input type="number" class="form-control" name="QuantiteStock" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Seuil d'Alerte</label>
+                                <input type="number" class="form-control" name="SeuilAlerte" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" name="Description" rows="2"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Détails Produit -->
+<div class="modal fade" id="productDetailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title">Détails du Produit</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="productDetailsContent">
+                <!-- Contenu statique pour l'exemple -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6>Informations de base</h6>
+                        <p><strong>Code:</strong> <span id="detailCode">PROD001</span></p>
+                        <p><strong>Nom:</strong> <span id="detailNom">Filet de Boeuf</span></p>
+                        <p><strong>Catégorie:</strong> <span id="detailCategorie">Viande</span></p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Stock & Prix</h6>
+                        <p><strong>Prix Unitaire:</strong> <span id="detailPrix">120.00 DH</span></p>
+                        <p><strong>Stock actuel:</strong> <span id="detailStock">15</span></p>
+                        <p><strong>Seuil d'alerte:</strong> <span id="detailSeuil">20</span></p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Statut</h6>
+                        <p><span class="badge bg-danger">Alerte Stock</span></p>
+                        <p><strong>Dernière mise à jour:</strong> 15/06/2023</p>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <h6>Description</h6>
+                    <p id="detailDescription">Filet de boeuf de première qualité, emballé sous vide pour une meilleure conservation.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <!-- Bibliothèques nécessaires -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // DataTable
+            var table = $('#productsTable').DataTable({
+                language: { url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/fr-FR.json' },
+                responsive: true,
+                dom: '<"top"lf>rt<"bottom"ip>'
+            });
+
+            // Filtres
+            $('#searchInput').on('keyup', function () {
+                table.search(this.value).draw();
+            });
+
+            $('#categoryFilter').on('change', function () {
+                table.column(2).search(this.value).draw();
+            });
+
+            $('#stockFilter').on('change', function () {
+                if (this.value === 'low') {
+                    table.column(6).search('Alerte Stock|Stock Faible', true, false).draw();
+                } else if (this.value === 'normal') {
+                    table.column(6).search('Disponible', true, false).draw();
+                } else {
+                    table.column(6).search('').draw();
+                }
+            });
+
+            $('#resetFilters').click(function () {
+                $('#searchInput, #categoryFilter, #stockFilter').val('');
+                table.search('').columns().search('').draw();
+            });
+
+            // Initialisation des graphiques
+            initCharts();
+        });
+
+        function initCharts() {
+            // Graphique répartition par catégorie
+            var categoryChart = new ApexCharts(
+                document.querySelector("#categoryChart"),
+                {
+                    series: [25, 20, 30, 15, 10],
+                    labels: ['Viande', 'Poisson', 'Laitier', 'Légume', 'Autre'],
+                    chart: { type: 'donut', height: 350 },
+                    colors: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
+                    responsive: [{
+                        breakpoint: 480,
+                        options: {
+                            chart: { width: 200 },
+                            legend: { position: 'bottom' }
+                        }
+                    }]
+                }
+            );
+            categoryChart.render();
+
+            // Graphique des niveaux de stock
+            var stockLevelChart = new ApexCharts(
+                document.querySelector("#stockLevelChart"),
+                {
+                    series: [
+                        { name: 'Stock Actuel', data: [15, 25, 50, 10, 8] },
+                        { name: 'Seuil Alerte', data: [20, 15, 30, 25, 10] }
+                    ],
+                    chart: { type: 'bar', height: 350 },
+                    colors: ['#4CAF50', '#F44336'],
+                    plotOptions: { bar: { horizontal: false, columnWidth: '55%', endingShape: 'rounded' } },
+                    dataLabels: { enabled: false },
+                    stroke: { show: true, width: 2, colors: ['transparent'] },
+                    xaxis: { categories: ['Filet de Boeuf', 'Saumon Frais', 'Lait Entier', 'Tomates', 'Fromage Blanc'] },
+                    yaxis: { title: { text: 'Quantité' } },
+                    fill: { opacity: 1 },
+                    tooltip: { y: { formatter: val => val + " unités" } }
+                }
+            );
+            stockLevelChart.render();
+        }
+    </script>
+}

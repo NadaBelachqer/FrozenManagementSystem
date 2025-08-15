@@ -1,0 +1,142 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Connexion";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewBag.Title - ColdStock Pro</title>
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/css/adminlte.min.css">
+    <style>
+        body {
+            background-color: #f4f6f9;
+            background-image: linear-gradient(to bottom, #f4f6f9, #d2d6de);
+            min-height: 100vh;
+        }
+
+        .login-box {
+            width: 550px;
+            margin: 5% auto;
+        }
+
+        .login-logo {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .login-card-body {
+            border-top: 3px solid #007bff;
+            border-radius: 5px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-social {
+            margin-bottom: 0.8rem;
+        }
+
+        .login-page {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <b>ColdStock</b> Pro
+        </div>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                @ViewBag.Error
+            </div>
+        }
+
+        <div class="card">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg" style="font-size: 1.1rem; margin-bottom: 1.5rem;">Connectez-vous pour commencer votre session</p>
+
+                @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="input-group mb-3">
+                        <input type="text" name="login" class="form-control form-control-lg" placeholder="Identifiant" required>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-4">
+                        <input type="password" name="motdepasse" class="form-control form-control-lg" placeholder="Mot de passe" required>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="icheck-primary">
+                                <input type="checkbox" id="remember">
+                                <label for="remember" style="font-size: 0.95rem;">
+                                    Se souvenir de moi
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-primary btn-block btn-lg">Connexion</button>
+                        </div>
+                    </div>
+                }
+
+                <div class="social-auth-links text-center mt-4 mb-3">
+                    <p class="mb-3" style="font-size: 0.95rem;">- OU -</p>
+                    <a href="#" class="btn btn-block btn-danger btn-social">
+                        <i class="fab fa-google mr-2"></i> Se connecter avec Google
+                    </a>
+                    <a href="#" class="btn btn-block btn-primary btn-social">
+                        <i class="fab fa-facebook-f mr-2"></i> Se connecter avec Facebook
+                    </a>
+                </div>
+
+                <div class="text-center">
+                    <p class="mb-2">
+                        <a href="#" class="text-sm">J'ai oublié mon mot de passe</a>
+                    </p>
+                    <p class="mb-0">
+                        <a href="#" class="text-sm">Créer un nouveau compte</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
+</body>
+</html>

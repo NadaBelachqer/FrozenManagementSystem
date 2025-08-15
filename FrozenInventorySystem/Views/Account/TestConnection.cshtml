@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = "Test de connexion";
+}
+
+<h2>Résultat du test de connexion</h2>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
+else
+{
+    <div class="alert alert-success">
+        @ViewBag.Message
+        <br />
+        Version du serveur: @ViewBag.ServerVersion
+        <br />
+        Nombre d'utilisateurs: @ViewBag.UserCount
+    </div>
+}

@@ -1,0 +1,589 @@
+﻿@{
+    ViewBag.Title = "Gestion des Bons d'Entrée";
+}
+
+<div class="card">
+    <div class="card-header bg-light">
+        <div class="d-flex justify-content-between align-items-center">
+            <h3 class="card-title">
+                <i class="bi bi-box-seam"></i> Bons d'Entrée
+            </h3>
+            <div>
+                <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addEntryModal">
+                    <i class="bi bi-plus-circle"></i> Nouveau Bon
+                </button>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="bi bi-download"></i> Exporter
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#" id="exportExcel">
+                            <i class="bi bi-file-earmark-excel"></i> Excel
+                        </a>
+                        <a class="dropdown-item" href="#" id="exportPDF">
+                            <i class="bi bi-file-earmark-pdf"></i> PDF
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <!-- Filtres avancés -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <input type="text" id="searchInput" class="form-control" placeholder="Rechercher...">
+            </div>
+            <div class="col-md-2">
+                <select id="clientFilter" class="form-select">
+                    <option value="">Tous les clients</option>
+                    <option value="1">Client 1</option>
+                    <option value="2">Client 2</option>
+                    <option value="3">Client 3</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select id="productFilter" class="form-select">
+                    <option value="">Tous les produits</option>
+                    <option value="1">Produit 1</option>
+                    <option value="2">Produit 2</option>
+                    <option value="3">Produit 3</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <input type="date" id="dateFilter" class="form-control">
+            </div>
+            <div class="col-md-2">
+                <button id="resetFilters" class="btn btn-outline-secondary w-100">
+                    <i class="bi bi-arrow-counterclockwise"></i> Réinitialiser
+                </button>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table id="entryTable" class="table table-bordered table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>N° Bon</th>
+                        <th>Date</th>
+                        <th>Client</th>
+                        <th>Produit</th>
+                        <th>Quantité</th>
+                        <th>Durée (sem)</th>
+                        <th>Coût</th>
+                        <th>Prix</th>
+                        <th>Expiration</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>BE23-00001</td>
+                        <td>15/06/2023</td>
+                        <td>Client 1</td>
+                        <td>Produit A</td>
+                        <td>100</td>
+                        <td>8</td>
+                        <td>5 000,00 DH</td>
+                        <td>6 500,00 DH</td>
+                        <td>15/08/2023</td>
+                        <td>
+                            <button class="btn btn-sm btn-info" title="Détails" onclick="showEntryDetails(1)">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" title="Modifier" onclick="editEntry(1)">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-success" title="Zones" onclick="showZones(1)">
+                                <i class="bi bi-boxes"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>BE23-00002</td>
+                        <td>20/06/2023</td>
+                        <td>Client 2</td>
+                        <td>Produit B</td>
+                        <td>150</td>
+                        <td>12</td>
+                        <td>7 500,00 DH</td>
+                        <td>9 750,00 DH</td>
+                        <td>20/09/2023</td>
+                        <td>
+                            <button class="btn btn-sm btn-info" title="Détails" onclick="showEntryDetails(2)">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" title="Modifier" onclick="editEntry(2)">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-success" title="Zones" onclick="showZones(2)">
+                                <i class="bi bi-boxes"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>BE23-00003</td>
+                        <td>25/06/2023</td>
+                        <td>Client 3</td>
+                        <td>Produit C</td>
+                        <td>75</td>
+                        <td>6</td>
+                        <td>3 750,00 DH</td>
+                        <td>4 875,00 DH</td>
+                        <td>25/08/2023</td>
+                        <td>
+                            <button class="btn btn-sm btn-info" title="Détails" onclick="showEntryDetails(3)">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" title="Modifier" onclick="editEntry(3)">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-success" title="Zones" onclick="showZones(3)">
+                                <i class="bi bi-boxes"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Ajout/Modification Bon d'Entrée -->
+<div class="modal fade" id="addEntryModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Nouveau Bon d'Entrée</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="entryForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Numéro Bon</label>
+                                <input type="text" class="form-control" value="BE23-00004" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Date</label>
+                                <input type="date" class="form-control" name="DateBonEntree" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Client</label>
+                                <select class="form-select" name="ClientID" required>
+                                    <option value="">Sélectionner un client</option>
+                                    <option value="1">Client 1</option>
+                                    <option value="2">Client 2</option>
+                                    <option value="3">Client 3</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Produit</label>
+                                <select class="form-select" name="ProduitID" required>
+                                    <option value="">Sélectionner un produit</option>
+                                    <option value="1">Produit A</option>
+                                    <option value="2">Produit B</option>
+                                    <option value="3">Produit C</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Quantité</label>
+                                <input type="number" class="form-control" name="QteEntree" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Durée (semaines)</label>
+                                <input type="number" min="4" class="form-control" name="Duree" value="4" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Coût</label>
+                                <input type="number" step="0.01" class="form-control" name="Cout">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Prix</label>
+                                <input type="number" step="0.01" class="form-control" name="Prix">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Code Barre</label>
+                                <input type="text" class="form-control" name="CodeBarre">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Date d'Expiration</label>
+                                <input type="date" class="form-control" name="DateExpiration">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Caractéristiques</label>
+                        <textarea class="form-control" name="Caracteristiques" rows="2"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Lot</label>
+                        <input type="text" class="form-control" name="Lot">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Détails Bon d'Entrée -->
+<div class="modal fade" id="entryDetailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title">Détails du Bon d'Entrée</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="entryDetailsContent">
+                <!-- Contenu statique pour l'exemple -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Informations de base</h6>
+                        <p><strong>N° Bon:</strong> <span id="detailNumero">BE23-00001</span></p>
+                        <p><strong>Date:</strong> <span id="detailDate">15/06/2023</span></p>
+                        <p><strong>Client:</strong> <span id="detailClient">Client 1</span></p>
+                        <p><strong>Produit:</strong> <span id="detailProduit">Produit A</span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Détails stockage</h6>
+                        <p><strong>Quantité:</strong> <span id="detailQte">100</span></p>
+                        <p><strong>Durée:</strong> <span id="detailDuree">8 semaines</span></p>
+                        <p><strong>Coût:</strong> <span id="detailCout">5 000,00 DH</span></p>
+                        <p><strong>Prix:</strong> <span id="detailPrix">6 500,00 DH</span></p>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <p><strong>Code Barre:</strong> <span id="detailCodeBarre">1234567890</span></p>
+                        <p><strong>Lot:</strong> <span id="detailLot">LOT-2023-001</span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Date Expiration:</strong> <span id="detailExpiration">15/08/2023</span></p>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <h6>Caractéristiques</h6>
+                    <p id="detailCaracteristiques">Produit frais, emballé sous vide, température de conservation recommandée: 4°C</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Affectation aux Zones -->
+<div class="modal fade" id="zonesModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">Affectation aux Zones de Stockage</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> Quantité totale à affecter: <strong id="totalQteToAssign">100</strong> unités
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Frégon</th>
+                                <th>Zone</th>
+                                <th>Quantité</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="zonesTableBody">
+                            <tr>
+                                <td>Frégon 1</td>
+                                <td>Zone A</td>
+                                <td>50</td>
+                                <td>
+                                    <button class="btn btn-sm btn-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Frégon 2</td>
+                                <td>Zone B</td>
+                                <td>50</td>
+                                <td>
+                                    <button class="btn btn-sm btn-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h6>Ajouter une affectation</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Frégon</label>
+                                    <select class="form-select" id="fregonSelect">
+                                        <option value="">Sélectionner</option>
+                                        <option value="1">Frégon 1</option>
+                                        <option value="2">Frégon 2</option>
+                                        <option value="3">Frégon 3</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Zone</label>
+                                    <select class="form-select" id="zoneSelect" disabled>
+                                        <option value="">Sélectionner un frégon d'abord</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Quantité</label>
+                                    <input type="number" class="form-control" id="qteToAssign" min="1" value="1">
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" id="addAffectation">
+                            <i class="bi bi-plus"></i> Ajouter
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-success">Valider l'affectation</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Initialisation de DataTable
+            var table = $('#entryTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/fr-FR.json'
+                },
+                responsive: true,
+                dom: '<"top"lf>rt<"bottom"ip>',
+                buttons: [
+                    {
+                        extend: 'excel',
+                        text: '<i class="bi bi-file-earmark-excel"></i> Excel',
+                        className: 'btn btn-success'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<i class="bi bi-file-earmark-pdf"></i> PDF',
+                        className: 'btn btn-danger'
+                    }
+                ]
+            });
+
+            // Filtrage avancé
+            $('#searchInput').on('keyup', function () {
+                table.search(this.value).draw();
+            });
+
+            $('#clientFilter').on('change', function () {
+                table.column(2).search(this.value).draw();
+            });
+
+            $('#productFilter').on('change', function () {
+                table.column(3).search(this.value).draw();
+            });
+
+            $('#dateFilter').on('change', function () {
+                table.column(1).search(this.value).draw();
+            });
+
+            $('#resetFilters').click(function () {
+                $('#searchInput').val('');
+                $('#clientFilter').val('');
+                $('#productFilter').val('');
+                $('#dateFilter').val('');
+                table.search('').columns().search('').draw();
+            });
+
+            // Export Excel
+            $('#exportExcel').click(function () {
+                table.button('.buttons-excel').trigger();
+            });
+
+            // Export PDF
+            $('#exportPDF').click(function () {
+                table.button('.buttons-pdf').trigger();
+            });
+
+            // Gestion du formulaire
+            $('#entryForm').on('submit', function(e) {
+                e.preventDefault();
+                alert('Bon d\'entrée enregistré avec succès (simulation)');
+                $('#addEntryModal').modal('hide');
+                this.reset();
+            });
+
+            // Simulation du chargement des zones par frégon
+            $('#fregonSelect').on('change', function() {
+                var fregonId = $(this).val();
+                if (fregonId) {
+                    $('#zoneSelect').empty().append('<option value="">Chargement...</option>').prop('disabled', false);
+
+                    // Simulation de chargement asynchrone
+                    setTimeout(function() {
+                        var zones = [];
+                        if (fregonId == '1') {
+                            zones = ['Zone A', 'Zone B', 'Zone C'];
+                        } else if (fregonId == '2') {
+                            zones = ['Zone D', 'Zone E'];
+                        } else {
+                            zones = ['Zone F', 'Zone G', 'Zone H', 'Zone I'];
+                        }
+
+                        $('#zoneSelect').empty().append('<option value="">Sélectionner une zone</option>');
+                        zones.forEach(function(zone, index) {
+                            $('#zoneSelect').append('<option value="' + (index+1) + '">' + zone + '</option>');
+                        });
+                    }, 500);
+                } else {
+                    $('#zoneSelect').empty().append('<option value="">Sélectionner un frégon d\'abord</option>').prop('disabled', true);
+                }
+            });
+
+            // Simulation d'ajout d'affectation
+            $('#addAffectation').on('click', function() {
+                var fregon = $('#fregonSelect option:selected').text();
+                var zone = $('#zoneSelect option:selected').text();
+                var qte = $('#qteToAssign').val();
+
+                if (fregon && zone && qte > 0) {
+                    var newRow = '<tr>' +
+                        '<td>' + fregon + '</td>' +
+                        '<td>' + zone + '</td>' +
+                        '<td>' + qte + '</td>' +
+                        '<td><button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button></td>' +
+                        '</tr>';
+
+                    $('#zonesTableBody').append(newRow);
+
+                    // Réinitialiser les sélections
+                    $('#fregonSelect').val('');
+                    $('#zoneSelect').val('').prop('disabled', true);
+                    $('#qteToAssign').val('1');
+                } else {
+                    alert('Veuillez remplir tous les champs');
+                }
+            });
+        });
+
+        function showEntryDetails(entryId) {
+            // Simulation de données pour les détails
+            var entries = {
+                1: {
+                    numero: "BE23-00001",
+                    date: "15/06/2023",
+                    client: "Client 1",
+                    produit: "Produit A",
+                    qte: 100,
+                    duree: 8,
+                    cout: "5 000,00 DH",
+                    prix: "6 500,00 DH",
+                    codeBarre: "1234567890",
+                    lot: "LOT-2023-001",
+                    expiration: "15/08/2023",
+                    caracteristiques: "Produit frais, emballé sous vide, température de conservation recommandée: 4°C"
+                },
+                2: {
+                    numero: "BE23-00002",
+                    date: "20/06/2023",
+                    client: "Client 2",
+                    produit: "Produit B",
+                    qte: 150,
+                    duree: 12,
+                    cout: "7 500,00 DH",
+                    prix: "9 750,00 DH",
+                    codeBarre: "9876543210",
+                    lot: "LOT-2023-002",
+                    expiration: "20/09/2023",
+                    caracteristiques: "Produit sec, emballage carton"
+                },
+                3: {
+                    numero: "BE23-00003",
+                    date: "25/06/2023",
+                    client: "Client 3",
+                    produit: "Produit C",
+                    qte: 75,
+                    duree: 6,
+                    cout: "3 750,00 DH",
+                    prix: "4 875,00 DH",
+                    codeBarre: "4561237890",
+                    lot: "LOT-2023-003",
+                    expiration: "25/08/2023",
+                    caracteristiques: "Produit congelé, température de conservation recommandée: -18°C"
+                }
+            };
+
+            var entry = entries[entryId];
+            if (entry) {
+                $('#detailNumero').text(entry.numero);
+                $('#detailDate').text(entry.date);
+                $('#detailClient').text(entry.client);
+                $('#detailProduit').text(entry.produit);
+                $('#detailQte').text(entry.qte);
+                $('#detailDuree').text(entry.duree + ' semaines');
+                $('#detailCout').text(entry.cout);
+                $('#detailPrix').text(entry.prix);
+                $('#detailCodeBarre').text(entry.codeBarre);
+                $('#detailLot').text(entry.lot);
+                $('#detailExpiration').text(entry.expiration);
+                $('#detailCaracteristiques').text(entry.caracteristiques);
+
+                $('#entryDetailsModal').modal('show');
+            }
+        }
+
+        function editEntry(entryId) {
+            alert('Fonctionnalité de modification pour le bon d\'entrée ID: ' + entryId + ' (simulation)');
+        }
+
+        function showZones(entryId) {
+            // Simulation de la quantité totale selon l'ID
+            var totalQte = 0;
+            if (entryId == 1) totalQte = 100;
+            else if (entryId == 2) totalQte = 150;
+            else if (entryId == 3) totalQte = 75;
+
+            $('#totalQteToAssign').text(totalQte);
+            $('#zonesModal').modal('show');
+        }
+    </script>
+}

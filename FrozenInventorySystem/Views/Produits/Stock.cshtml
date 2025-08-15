@@ -1,0 +1,372 @@
+﻿@{
+    ViewBag.Title = "Gestion des Stocks";
+}
+
+<div class="card">
+    <div class="card-header bg-light">
+        <div class="d-flex justify-content-between align-items-center">
+            <h3 class="card-title">
+                <i class="bi bi-boxes"></i> Niveaux de Stock
+            </h3>
+            <div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="bi bi-download"></i> Exporter
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#" id="exportStockExcel">
+                            <i class="bi bi-file-earmark-excel"></i> Excel
+                        </a>
+                        <a class="dropdown-item" href="#" id="exportStockPDF">
+                            <i class="bi bi-file-earmark-pdf"></i> PDF
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <!-- Filtres avancés -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <input type="text" id="stockSearch" class="form-control" placeholder="Rechercher produit...">
+            </div>
+            <div class="col-md-2">
+                <select id="locationFilter" class="form-select">
+                    <option value="">Tous les emplacements</option>
+                    <option value="FregonNord">Frégon Nord</option>
+                    <option value="FregonSud">Frégon Sud</option>
+                    <option value="FregonEst">Frégon Est</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select id="statusFilter" class="form-select">
+                    <option value="">Tous les statuts</option>
+                    <option value="alert">Alerte Stock</option>
+                    <option value="warning">Stock Faible</option>
+                    <option value="normal">Stock Normal</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button id="resetStockFilters" class="btn btn-outline-secondary w-100">
+                    <i class="bi bi-arrow-counterclockwise"></i> Réinitialiser
+                </button>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table id="stockTable" class="table table-bordered table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Produit</th>
+                        <th>Code</th>
+                        <th>Emplacement</th>
+                        <th>Stock Actuel</th>
+                        <th>Seuil Alerte</th>
+                        <th>Statut</th>
+                        <th>Dernière Mise à Jour</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.ProduitNom</td>
+                            <td>@item.ProduitCode</td>
+                            <td>
+                                <span class="badge bg-secondary">@item.FregonNom</span>
+                                <span class="badge bg-info">@item.ZoneNom</span>
+                            </td>
+                            <td>@item.QuantiteDisponible</td>
+                            <td>@item.SeuilAlerte</td>
+                            <td>
+                                @if (item.QuantiteDisponible < item.SeuilAlerte)
+                                {
+                                    <span class="badge bg-danger">Alerte Stock</span>
+                                }
+                                else if (item.QuantiteDisponible < (item.SeuilAlerte * 1.5))
+                                {
+                                    <span class="badge bg-warning">Stock Faible</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">Disponible</span>
+                                }
+                            </td>
+                            <td>@item.DateMiseAJour.ToString("dd/MM/yyyy")</td>
+                            <td>
+                                <button class="btn btn-sm btn-info" title="Historique" onclick="showStockHistory(@item.StockId)">
+                                    <i class="bi bi-clock-history"></i>
+                                </button>
+                                <button class="btn btn-sm btn-warning" title="Ajustement" onclick="adjustStock(@item.StockId)">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Graphiques statistiques -->
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="card-title">
+                    <i class="bi bi-exclamation-triangle"></i> Produits en Alerte
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="alertProductsChart" style="min-height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title">
+                    <i class="bi bi-arrow-left-right"></i> Mouvements Récents
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="stockMovementsChart" style="min-height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Historique Stock -->
+<div class="modal fade" id="stockHistoryModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title">Historique du Stock</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="stockHistoryContent">
+                <!-- Contenu chargé dynamiquement -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Ajustement Stock -->
+<div class="modal fade" id="adjustStockModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title">Ajustement de Stock</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="adjustStockForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Type d'ajustement</label>
+                        <select class="form-select" id="adjustmentType" required>
+                            <option value="in">Entrée de stock</option>
+                            <option value="out">Sortie de stock</option>
+                            <option value="correction">Correction</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Quantité</label>
+                        <input type="number" class="form-control" id="adjustmentQuantity" min="1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Raison</label>
+                        <textarea class="form-control" id="adjustmentReason" rows="2" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-warning">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Initialisation de DataTable
+            var stockTable = $('#stockTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/fr-FR.json'
+                },
+                responsive: true,
+                dom: '<"top"lf>rt<"bottom"ip>',
+                buttons: [
+                    {
+                        extend: 'excel',
+                        text: '<i class="bi bi-file-earmark-excel"></i> Excel',
+                        className: 'btn btn-success',
+                        title: 'Niveaux_de_stock_' + new Date().toLocaleDateString(),
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<i class="bi bi-file-earmark-pdf"></i> PDF',
+                        className: 'btn btn-danger',
+                        title: 'Niveaux_de_stock_' + new Date().toLocaleDateString(),
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        }
+                    }
+                ]
+            });
+
+            // Filtrage avancé
+            $('#stockSearch').on('keyup', function () {
+                stockTable.search(this.value).draw();
+            });
+
+            $('#locationFilter').on('change', function () {
+                stockTable.column(2).search(this.value).draw();
+            });
+
+            $('#statusFilter').on('change', function () {
+                if (this.value === 'alert') {
+                    stockTable.column(5).search('Alerte Stock', true, false).draw();
+                } else if (this.value === 'warning') {
+                    stockTable.column(5).search('Stock Faible', true, false).draw();
+                } else if (this.value === 'normal') {
+                    stockTable.column(5).search('Disponible', true, false).draw();
+                } else {
+                    stockTable.column(5).search('').draw();
+                }
+            });
+
+            $('#resetStockFilters').click(function () {
+                $('#stockSearch').val('');
+                $('#locationFilter').val('');
+                $('#statusFilter').val('');
+                stockTable.search('').columns().search('').draw();
+            });
+
+            // Export Excel
+            $('#exportStockExcel').click(function () {
+                stockTable.button('.buttons-excel').trigger();
+            });
+
+            // Export PDF
+            $('#exportStockPDF').click(function () {
+                stockTable.button('.buttons-pdf').trigger();
+            });
+
+            // Initialisation des graphiques
+            initStockCharts();
+        });
+
+        function initStockCharts() {
+            // Graphique des produits en alerte
+            var alertOptions = {
+                series: [{
+                    name: 'Produits en alerte',
+                    data: [10, 5, 8, 12, 7, 15, 9]
+                }],
+                chart: {
+                    type: 'bar',
+                    height: 350,
+                    toolbar: {
+                        show: false
+                    }
+                },
+                colors: ['#FF4560'],
+                plotOptions: {
+                    bar: {
+                        borderRadius: 4,
+                        horizontal: true,
+                    }
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                xaxis: {
+                    categories: ['Viande Bovine', 'Saumon', 'Fromage', 'Crème Fraîche', 'Beurre', 'Poulet', 'Poisson Blanc'],
+                },
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            return val + " produits"
+                        }
+                    }
+                }
+            };
+
+            var alertChart = new ApexCharts(document.querySelector("#alertProductsChart"), alertOptions);
+            alertChart.render();
+
+            // Graphique des mouvements de stock
+            var movementOptions = {
+                series: [{
+                    name: 'Entrées',
+                    data: [30, 40, 35, 50, 49, 60, 70]
+                }, {
+                    name: 'Sorties',
+                    data: [20, 30, 25, 40, 39, 50, 60]
+                }],
+                chart: {
+                    type: 'line',
+                    height: 350,
+                    toolbar: {
+                        show: false
+                    }
+                },
+                colors: ['#00E396', '#FF4560'],
+                stroke: {
+                    width: [3, 3],
+                    curve: 'smooth'
+                },
+                xaxis: {
+                    categories: ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'],
+                },
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            return val + " unités"
+                        }
+                    }
+                }
+            };
+
+            var movementChart = new ApexCharts(document.querySelector("#stockMovementsChart"), movementOptions);
+            movementChart.render();
+        }
+
+        function showStockHistory(stockId) {
+            $.get('@Url.Action("StockHistory")', { id: stockId }, function (data) {
+                $('#stockHistoryContent').html(data);
+                $('#stockHistoryModal').modal('show');
+            });
+        }
+
+        function adjustStock(stockId) {
+            // À implémenter selon votre logique métier
+            $('#adjustStockModal').modal('show');
+        }
+
+        // Gestion du formulaire d'ajustement
+        $('#adjustStockForm').submit(function (e) {
+            e.preventDefault();
+            // Ici, ajouter la logique pour sauvegarder l'ajustement
+            alert('Ajustement enregistré avec succès!');
+            $('#adjustStockModal').modal('hide');
+            // Recharger les données si nécessaire
+        });
+    </script>
+}

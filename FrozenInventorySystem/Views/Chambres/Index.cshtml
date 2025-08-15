@@ -1,0 +1,184 @@
+﻿@{
+    ViewBag.Title = "Gestion des Chambres Froides";
+}
+
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h3 class="card-title">Liste des Chambres Froides</h3>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#chambreModal">
+                <i class="bi bi-plus-circle"></i> Ajouter Chambre
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="chambresTable" class="table table-bordered table-striped table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Nom</th>
+                        <th>Température</th>
+                        <th>Humidité</th>
+                        <th>Remplissage</th>
+                        <th>Statut</th>
+                        <th>Zones</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Chambre #1 - Viandes</td>
+                        <td>-18°C</td>
+                        <td>65%</td>
+                        <td>
+                            <div class="progress progress-xs">
+                                <div class="progress-bar bg-success" style="width: 75%"></div>
+                            </div>
+                            <small>75% rempli</small>
+                        </td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>4 zones</td>
+                        <td>
+                            <button class="btn btn-sm btn-info" title="Détails">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" title="Modifier">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" title="Désactiver">
+                                <i class="bi bi-power"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Chambre #2 - Poissons</td>
+                        <td>-22°C</td>
+                        <td>70%</td>
+                        <td>
+                            <div class="progress progress-xs">
+                                <div class="progress-bar bg-warning" style="width: 85%"></div>
+                            </div>
+                            <small>85% rempli</small>
+                        </td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>3 zones</td>
+                        <td>
+                            <button class="btn btn-sm btn-info" title="Détails">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" title="Modifier">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" title="Désactiver">
+                                <i class="bi bi-power"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Chambre #3 - Produits Laitiers</td>
+                        <td>4°C</td>
+                        <td>60%</td>
+                        <td>
+                            <div class="progress progress-xs">
+                                <div class="progress-bar bg-danger" style="width: 95%"></div>
+                            </div>
+                            <small>95% rempli</small>
+                        </td>
+                        <td><span class="badge bg-warning">Pleine</span></td>
+                        <td>5 zones</td>
+                        <td>
+                            <button class="btn btn-sm btn-info" title="Détails">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" title="Modifier">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" title="Désactiver">
+                                <i class="bi bi-power"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal pour ajouter/modifier une chambre -->
+<div class="modal fade" id="chambreModal" tabindex="-1" aria-labelledby="chambreModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="chambreModalLabel">Nouvelle Chambre Froide</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="chambreForm">
+                    <div class="mb-3">
+                        <label for="chambreNom" class="form-label">Nom de la Chambre</label>
+                        <input type="text" class="form-control" id="chambreNom" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="chambreType" class="form-label">Type de Stockage</label>
+                        <select class="form-select" id="chambreType" required>
+                            <option value="">Sélectionner un type</option>
+                            <option value="viande">Viandes</option>
+                            <option value="poisson">Poissons</option>
+                            <option value="laitier">Produits Laitiers</option>
+                            <option value="legume">Légumes</option>
+                            <option value="mixte">Mixte</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="chambreTemp" class="form-label">Température (°C)</label>
+                                <input type="number" class="form-control" id="chambreTemp" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="chambreHumidite" class="form-label">Humidité (%)</label>
+                                <input type="number" class="form-control" id="chambreHumidite" min="0" max="100" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="chambreCapacite" class="form-label">Capacité (m³)</label>
+                        <input type="number" class="form-control" id="chambreCapacite" min="1" required>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="chambreActive" checked>
+                        <label class="form-check-label" for="chambreActive">Chambre active</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-primary" id="saveChambre">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function() {
+            // Initialisation de DataTable pour les chambres
+            $('#chambresTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/fr-FR.json'
+                },
+                responsive: true
+            });
+
+            // Gestion de l'enregistrement d'une chambre
+            $('#saveChambre').click(function() {
+                // Ici, ajouter le code pour sauvegarder la chambre via AJAX
+                alert('Chambre enregistrée avec succès!');
+                $('#chambreModal').modal('hide');
+                // Recharger les données du tableau
+            });
+        });
+    </script>
+}
