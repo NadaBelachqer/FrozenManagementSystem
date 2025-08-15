@@ -1,3 +1,4 @@
+# InventorySystem
 # 🧊 Frozen Inventory System
 
 Un système de gestion d'inventaire pour entrepôts frigorifiques développé en ASP.NET MVC.
@@ -77,7 +78,7 @@ Frozen Inventory System est une application web complète de gestion d'inventair
 - IIS (pour le déploiement en production)
 
 ### Développement
-- Visual Studio 2019/2022
+- Visual Studio 2019
 - SQL Server Management Studio (recommandé)
 - Git pour le contrôle de version
 
@@ -122,120 +123,22 @@ Update-Database
 1. Appuyez sur `F5` ou cliquez sur "Start Debugging"
 2. L'application s'ouvrira dans votre navigateur par défaut
 
-## 📁 Structure du Projet
+## 🖼️ Aperçu du projet
 
-```
-FrozenInventorySystem/
-├── Controllers/           # Contrôleurs MVC
-│   ├── AccountController.cs
-│   ├── HomeController.cs
-│   ├── ProduitsController.cs
-│   ├── ClientsController.cs
-│   └── ...
-├── Models/               # Modèles de données
-│   ├── FrozenDbContext.cs
-│   └── Utilisateur.cs
-├── Views/                # Vues Razor
-│   ├── Home/
-│   ├── Account/
-│   ├── Produits/
-│   └── ...
-├── Content/              # Fichiers statiques (CSS, images)
-├── Scripts/              # Fichiers JavaScript
-├── App_Start/            # Configuration de l'application
-├── App_Data/             # Données de l'application
-└── Web.config            # Configuration web
-```
+<img width="1887" height="869" alt="image" src="https://github.com/user-attachments/assets/97787398-4f61-4ee0-aec6-d22d098a2dfe" />
+<img width="1915" height="903" alt="image" src="https://github.com/user-attachments/assets/96dcc105-579c-45ac-8c03-9b0e21747023" />
+<img width="1919" height="905" alt="image" src="https://github.com/user-attachments/assets/d83ff9c1-7d24-4c8e-b97e-2b1a3875b91d" />
+<img width="1913" height="896" alt="image" src="https://github.com/user-attachments/assets/99c66e9f-c4de-4ba5-95b0-696448c2dcbc" />
+<img width="1904" height="910" alt="image" src="https://github.com/user-attachments/assets/3013e703-4b8d-4ae9-a6df-9957af1401a3" />
+<img width="1909" height="900" alt="image" src="https://github.com/user-attachments/assets/a03a4563-5549-40ff-aa88-15df1cf2ebdc" />
+<img width="1917" height="905" alt="image" src="https://github.com/user-attachments/assets/80187caf-e1a7-4abd-8f10-452aeb1b844d" />
+<img width="1911" height="872" alt="image" src="https://github.com/user-attachments/assets/8cb425ad-04f9-4dff-a934-9283b0e72666" />
+<img width="1919" height="900" alt="image" src="https://github.com/user-attachments/assets/b1b045a9-52df-4962-9fb6-469533cd6f4d" />
 
-## 🔧 Configuration
 
-### Variables d'Environnement
-- `FrozenInventoryDB` : Chaîne de connexion à la base de données
-- `webpages:Version` : Version des pages web
-- `ClientValidationEnabled` : Validation côté client
 
-### Sécurité
-- Authentification par formulaires configurée
-- Timeout de session : 2880 minutes (48 heures)
-- URL de connexion : `~/Account/Login`
 
-## 📊 Base de Données
 
-### Tables Principales
-- **Utilisateurs** : Gestion des comptes utilisateurs
-- **Produits** : Catalogue des produits
-- **Clients** : Base de données clients
-- **Chambres** : Gestion des chambres froides
-- **Mouvements** : Traçabilité des entrées/sorties
-- **Factures** : Gestion comptable
-- **Paiements** : Suivi des paiements
 
-## 🧪 Tests
 
-### Test de Connexion
-Un contrôleur de test est disponible pour vérifier la connexion à la base de données :
-- URL : `/TestConnexionBD`
-- Vérifie la connectivité SQL Server
-- Affiche les informations de connexion
 
-## 🚀 Déploiement
-
-### Développement
-1. Utilisez IIS Express (configuré par défaut)
-2. Port SSL : 44377
-3. Authentification Windows activée
-
-### Production
-1. Publiez l'application sur IIS
-2. Configurez la chaîne de connexion pour la production
-3. Activez la compression et la mise en cache
-4. Configurez les certificats SSL
-
-## 🤝 Contribution
-
-### Comment Contribuer
-1. Fork le projet
-2. Créez une branche pour votre fonctionnalité (`git checkout -b feature/AmazingFeature`)
-3. Committez vos changements (`git commit -m 'Add some AmazingFeature'`)
-4. Push vers la branche (`git push origin feature/AmazingFeature`)
-5. Ouvrez une Pull Request
-
-### Standards de Code
-- Suivez les conventions C# Microsoft
-- Utilisez des noms de variables explicites
-- Ajoutez des commentaires pour les logiques complexes
-- Testez vos modifications avant de soumettre
-
-## 📝 Changelog
-
-### Version 1.0.0
-- ✅ Système d'authentification complet
-- ✅ Gestion des produits et stocks
-- ✅ Interface utilisateur responsive
-- ✅ Base de données SQL Server
-- ✅ Rapports et analytics
-
-## 📄 Licence
-
-Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
-
-## 👥 Auteurs
-
-- **Votre Nom** - *Développement initial* - [VotreGitHub](https://github.com/votre-username)
-
-## 🙏 Remerciements
-
-- Équipe de développement ASP.NET
-- Communauté Bootstrap
-- Contributeurs open source
-
-## 📞 Support
-
-Pour toute question ou problème :
-- 📧 Email : votre-email@example.com
-- 🐛 Issues : [GitHub Issues](https://github.com/votre-username/FrozenInventorySystem/issues)
-- 📖 Documentation : [Wiki du projet](https://github.com/votre-username/FrozenInventorySystem/wiki)
-
----
-
-⭐ Si ce projet vous a été utile, n'hésitez pas à lui donner une étoile sur GitHub !
