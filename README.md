@@ -86,7 +86,7 @@ Frozen Inventory System est une application web complète de gestion d'inventair
 
 ### 1. Cloner le Repository
 ```bash
-git clone https://github.com/votre-username/FrozenInventorySystem.git
+git clone https://github.com/votre-username/FrozenManagementSystem.git
 cd FrozenInventorySystem
 ```
 
