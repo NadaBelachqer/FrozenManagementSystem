@@ -128,7 +128,6 @@ Update-Database
 <img width="1887" height="869" alt="image" src="https://github.com/user-attachments/assets/97787398-4f61-4ee0-aec6-d22d098a2dfe" />
 <img width="1915" height="903" alt="image" src="https://github.com/user-attachments/assets/96dcc105-579c-45ac-8c03-9b0e21747023" />
 <img width="1919" height="905" alt="image" src="https://github.com/user-attachments/assets/d83ff9c1-7d24-4c8e-b97e-2b1a3875b91d" />
-<img width="1913" height="896" alt="image" src="https://github.com/user-attachments/assets/99c66e9f-c4de-4ba5-95b0-696448c2dcbc" />
 <img width="1904" height="889" alt="image" src="https://github.com/user-attachments/assets/5429b5ec-e262-45a5-b37d-f3c5a7b3db02" />
 <img width="1882" height="885" alt="image" src="https://github.com/user-attachments/assets/249fd6d4-e3fb-4ece-94d0-baedf0b5b768" />
 <img width="1919" height="900" alt="image" src="https://github.com/user-attachments/assets/8857587f-ce90-4920-98a8-c5af3c6dcd0d" />
@@ -145,7 +144,7 @@ Update-Database
 <img width="1919" height="906" alt="image" src="https://github.com/user-attachments/assets/3a9c3338-ed0c-44cf-bf6e-7598b11c10e0" />
 <img width="1917" height="905" alt="image" src="https://github.com/user-attachments/assets/80187caf-e1a7-4abd-8f10-452aeb1b844d" />
 <img width="1911" height="872" alt="image" src="https://github.com/user-attachments/assets/8cb425ad-04f9-4dff-a934-9283b0e72666" />
-<img width="1919" height="900" alt="image" src="https://github.com/user-attachments/assets/b1b045a9-52df-4962-9fb6-469533cd6f4d" />
+<img width="1912" height="888" alt="image" src="https://github.com/user-attachments/assets/e2d19c4f-b687-4039-a62d-6db813c43955" />
 
 
 
